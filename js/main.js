@@ -5,7 +5,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   const password = document.getElementById('loginPassword').value.trim();
 
   try {
-    const res = await fetch('http://localhost:5000/api/login', {
+    const res = await fetch('http://localhost:5000/api/v1/login/user', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password })
@@ -16,7 +16,7 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     if (res.ok) {
       alert('Login successful!');
       localStorage.setItem('token', data.token);
-      window.location.href = 'index.html';
+      window.location.href = '/upload.html';
     } else {
       alert(data.message || 'Login failed.');
     }
@@ -34,17 +34,17 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
   const password = document.getElementById('registerPassword').value.trim();
 
   try {
-    const res = await fetch('http://localhost:5000/api/register', {
+    const res = await fetch('http://localhost:5000/api/v1/user/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, email, password })
     });
-
+    
     const data = await res.json();
 
     if (res.ok) {
       alert('Registration successful!');
-      window.location.href = 'login.html';
+      window.location.href = '/index.html';
     } else {
       alert(data.message || 'Registration failed.');
     }
@@ -64,14 +64,14 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
   }
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', ImageData);
 
   try {
-    const res = await fetch('http://localhost:5000/api/upload', {
+    const res = await fetch('http://localhost:5000/api/v1/image/upload', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      },
+      // headers: {
+      //   Authorization: `Bearer ${localStorage.getItem('token')}`
+      // },
       body: formData
     });
 
@@ -79,7 +79,7 @@ document.getElementById('uploadForm')?.addEventListener('submit', async (e) => {
 
     if (res.ok) {
       alert('Upload successful!');
-      window.location.href = 'view.html';
+      window.location.href = '/view.html';
     } else {
       alert(data.message || 'Upload failed.');
     }
